@@ -5,9 +5,14 @@
     <meta charset="utf-8">
     <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes"> -->
     <title>Three.js - Fundamentals with animation</title>
+    <link rel="stylesheet" href="asg5.css">
+
   </head>
   <body>
     <canvas id="c"></canvas>
+    <div id="loading">
+        <div class="progress"><div class="progressbar"></div></div>
+      </div>
   </body>
 <!-- <script type="importmap">
 {
@@ -18,77 +23,76 @@
 </script> -->
 
 <script type="module">
-import * as THREE from 'three';
+    import * as THREE from 'three';
 
-function main() {
+    function main() {
+        const canvas = document.querySelector('#c');
+        const renderer = new THREE.WebGLRenderer( { antialias: true, canvas } );
 
-	const canvas = document.querySelector( '#c' );
-	const renderer = new THREE.WebGLRenderer( { antialias: true, canvas } );
+        const fov = 75;
+        const aspect = 2;
+        const near = 0.1;
+        const far = 5;
+        const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
+        camera.position.z = 2;
 
-	const fov = 75;
-	const aspect = 2; // the canvas default
-	const near = 0.1;
-	const far = 5;
-	const camera = new THREE.PerspectiveCamera( fov, aspect, near, far );
-	camera.position.z = 2;
+        const scene = new THREE.Scene();
+        const boxWidth = 1;
+        const boxHeight = 1;
+        const boxDepth = 1;
+        const geometry = new THREE.BoxGeometry(boxWidth, boxHeight, boxDepth);
 
-	const scene = new THREE.Scene();
+        // Define cubes holder
+        const cubes = [];
 
-	const boxWidth = 1;
-	const boxHeight = 1;
-	const boxDepth = 1;
-	const geometry = new THREE.BoxGeometry( boxWidth, boxHeight, boxDepth );
+        // Loading Manager
+        const loadManager = new THREE.LoadingManager();
 
-	// const material = new THREE.MeshBasicMaterial( { color: 0x44aa88 } ); // greenish blue
-    // Use phong material for lighting
-    const material = new THREE.MeshPhongMaterial({color: 0x44aa88});
+        // Loading Screen Elements
+        const loadingElem = document.querySelector('#loading');
+        const progressBarElem = document.querySelector('.progressbar');
 
-	const cube = new THREE.Mesh( geometry, material );
-	// scene.add( cube );
+        loadManager.onLoad = () => {
+            loadingElem.style.display = 'none'; // Hide loading screen
+            const cube = new THREE.Mesh(geometry, materials);
+            scene.add(cube);
+            cubes.push(cube);
+        };
 
+        loadManager.onProgress = (path, loaded, total) => {
+            const progress = loaded / total;
+            progressBarElem.style.width = `${progress * 100}%`;
+        };
 
-    function makeInstance(geometry, color, x) {
-        const material = new THREE.MeshPhongMaterial({color});
+        const loader = new THREE.TextureLoader(loadManager);
+        const texturePaths = [
+            'lib/flower-1.jpg',
+            'lib/flower-2.jpg',
+            'lib/flower-3.jpg',
+            'lib/flower-4.jpg',
+            'lib/flower-5.jpg',
+            'lib/flower-6.jpg'
+        ];
 
-        const cube = new THREE.Mesh(geometry, material);
-        scene.add(cube);
+        const materials = texturePaths.map(path => 
+            new THREE.MeshBasicMaterial({ map: loader.load(path) })
+        );
 
-        cube.position.x = x;
+        function render(time) {
+            time *= 0.001;
 
-        return cube;
-    }
-    
-    const cubes = [
-        makeInstance(geometry, 0x44aa88,  0),
-        makeInstance(geometry, 0x8844aa, -2),
-        makeInstance(geometry, 0xaa8844,  2),
-    ];
-    const color = 0xFFFFFF;
-    const intensity = 3;
-    const light = new THREE.DirectionalLight(color, intensity);
-    light.position.set(-1, 2, 4);
-    scene.add(light);
+            cubes.forEach(cube => {
+                cube.rotation.x = time;
+                cube.rotation.y = time;
+            });
 
-    function render( time ) {
-
-        time *= 0.001; // convert time to seconds
-
-		cubes.forEach( ( cube, ndx ) => {
-
-        const speed = 1 + ndx * .1;
-        const rot = time * speed;
-        cube.rotation.x = rot;
-        cube.rotation.y = rot;
-
-        } );
-        renderer.render( scene, camera );
-
-        requestAnimationFrame( render );
-    }
-    requestAnimationFrame( render );
-
+            renderer.render(scene, camera);
+            requestAnimationFrame(render);
         }
 
-main();
-</script>
+        requestAnimationFrame(render);
+    }
+
+    main();
+  </script>
 </html>
