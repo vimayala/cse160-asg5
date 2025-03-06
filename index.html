@@ -69,13 +69,9 @@
         scene.add(ambientLight);
 
 
-
-
-        // const directionalColor1 = ;
-        // const intensity = 1;
         const light = new THREE.DirectionalLight(0xFFFFFF, 1);
         light.position.set(0, 9, 0);
-        light.target.position.set(-5, 5, 0);
+        light.target.position.set(0, 5, 0);
         scene.add(light);
         scene.add(light.target);
 
@@ -122,15 +118,63 @@
 
         ];
 
-        const cylinders = [
 
+
+
+        const cylinders = [
+            { x: 0, y: 5, z: againstWallZ, 
+                radiusT: 0.35, 
+                radiusB:0.35, 
+                height: 1, 
+                color: 0xd46648 
+            },
+            { x: -2.5, y: 7, z: againstWallZ, 
+                radiusT: 0.5, 
+                radiusB:0.5, 
+                height: 1, 
+                color: 0x4682b4 
+            },
+            { x: 3, y: 8.85, z: againstWallZ, 
+                radiusT: 0.3, 
+                radiusB: 0.3, 
+                height: 0.4, 
+                color: 0x32a852 
+            }
         ];
+
+        cylinders.forEach(({ x, y, z, radiusT, radiusB, height, color }) => {
+            const cylinderGeometry = new THREE.CylinderGeometry(radiusT, radiusB, height, 15);
+            const cylinderMaterial = new THREE.MeshBasicMaterial({ color });
+
+            const cylinder = new THREE.Mesh(cylinderGeometry, cylinderMaterial);
+            cylinder.position.set(x, y, z);
+            scene.add(cylinder);
+        });
+
+        const boxes = [
+            { x: 1, y: 5.25, z: againstWallZ, 
+                width: 0.5,
+                height: 1.5, 
+                depth: 1,
+                color: 0xffaaff 
+            },
+        ];
+
+        boxes.forEach(({ x, y, z, width, height, depth, color }) => {
+            const boxGeometry = new THREE.BoxGeometry(width, height, depth);
+            const boxMaterial = new THREE.MeshBasicMaterial({ color });
+
+            const box = new THREE.Mesh(boxGeometry, boxMaterial);
+            box.position.set(x, y, z);
+            scene.add(box);
+        });
+
+        // const cylinders = [
+
+        // ];
 
 
         // Cylinder creation
-        const cylinderGeometry = new THREE.CylinderGeometry( 0.5, 0.5, 2, 15 ); 
-        const cylinderMaterial = new THREE.MeshBasicMaterial( {color: 0xff0f0f} ); 
-        const cylinder = new THREE.Mesh( cylinderGeometry, cylinderMaterial ); 
         
 
         // Loading Manager
@@ -143,10 +187,8 @@
         loadManager.onLoad = () => {
             loadingElem.style.display = 'none'; // Hide loading screen
             const cube = new THREE.Mesh(geometry, materials);
-            // scene.add(cube);
-            // scene.add( cylinder );
-            // cubes.push(cube);
-            // cylinders.push(cylinder);
+            scene.add(cube);
+            cubes.push(cube);
         };
 
         loadManager.onProgress = (path, loaded, total) => {
