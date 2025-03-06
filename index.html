@@ -29,6 +29,7 @@
     import {MTLLoader} from 'three/addons/loaders/MTLLoader.js'
 
     function main() {
+        
         const canvas = document.querySelector('#c');
         const renderer = new THREE.WebGLRenderer( { antialias: true, canvas } );
         renderer.setPixelRatio(window.devicePixelRatio); // Fix blurry rendering
@@ -58,6 +59,7 @@
 
         const scene = new THREE.Scene();
         scene.background = new THREE.Color( 'white' );
+        
 
         // Define lighting
 
@@ -118,24 +120,127 @@
 
 
 
-        {
+        // {
 
-        const mtlLoader = new MTLLoader();
-        mtlLoader.load( 'resources/models/room/kitchenRoom.mtl', ( mtl ) => {
+        // const mtlLoader = new MTLLoader();
+        // mtlLoader.load( 'resources/models/room/kitchenRoom.mtl', ( mtl ) => {
 
-            mtl.preload();
-            const objLoader = new OBJLoader();
-            objLoader.setMaterials( mtl );
-            objLoader.load( 'resources/models/room/kitchenRoom.obj', ( root ) => {
+        //     mtl.preload();
+        //     const objLoader = new OBJLoader();
+        //     objLoader.setMaterials( mtl );
+        //     objLoader.load( 'resources/models/room/kitchenRoom.obj', ( root ) => {
 
-                scene.add( root );
+        //         scene.add( root );
 
-            } );
+        //     } );
 
-        } );
+        // } );
 
+        // }
+
+        const objectsToLoad = [
+            {
+                objPath: 'resources/models/room/kitchenRoom.obj',
+                mtlPath: 'resources/models/room/kitchenRoom.mtl',
+                position: { x: 0, y: 0, z: 0 }
+            },
+            {
+                objPath: 'resources/models/kitchenCabinet/kitchenCabinet.obj',
+                mtlPath: 'resources/models/kitchenCabinet/kitchenCabinet.mtl',
+                position: { x: 0.75, y: 0, z: -1.95 }, // Move cabinet to the right
+                scale: { x: 7, y: 7, z: 7 }, // Scale cabinet
+                rotation: { x: 0, y: 180, z: 0 } // Rotate cabinet
+            },
+            {
+                objPath: 'resources/models/kitchenCabinet/kitchenCabinet.obj',
+                mtlPath: 'resources/models/kitchenCabinet/kitchenCabinet.mtl',
+                position: { x: -2.25, y: 0, z: -1.95 }, // Move cabinet to the right
+                scale: { x: 7, y: 7, z: 7 }, // Scale cabinet
+                rotation: { x: 0, y: 180, z: 0 } // Rotate cabinet
+            },
+            {
+                objPath: 'resources/models/kitchenCabinet/kitchenCabinet.obj',
+                mtlPath: 'resources/models/kitchenCabinet/kitchenCabinet.mtl',
+                position: { x: -5.25, y: 0, z: -1.95 }, // Move cabinet to the right
+                scale: { x: 7, y: 7, z: 7 }, // Scale cabinet
+                rotation: { x: 0, y: 180, z: 0 } // Rotate cabinet
+            },
+            {
+                objPath: 'resources/models/kitchenCabinet/kitchenCabinet.obj',
+                mtlPath: 'resources/models/kitchenCabinet/kitchenCabinet.mtl',
+                position: { x: -2.25, y: 0, z: -1.95 }, // Move cabinet to the right
+                scale: { x: 7, y: 7, z: 7 }, // Scale cabinet
+                rotation: { x: 0, y: 270, z: 0 } // Rotate cabinet
+            },
+            {
+                objPath: 'resources/models/kitchenCabinet/kitchenCabinet.obj',
+                mtlPath: 'resources/models/kitchenCabinet/kitchenCabinet.mtl',
+                position: { x: -2.25, y: 0, z: 1 }, // Move cabinet to the right
+                scale: { x: 7, y: 7, z: 7 }, // Scale cabinet
+                rotation: { x: 0, y: 270, z: 0 } // Rotate cabinet
+            },
+            {
+                objPath: 'resources/models/kitchenCabinet/kitchenCabinet.obj',
+                mtlPath: 'resources/models/kitchenCabinet/kitchenCabinet.mtl',
+                position: { x: -2.25, y: 0, z: 4 }, // Move cabinet to the right
+                scale: { x: 7, y: 7, z: 7 }, // Scale cabinet
+                rotation: { x: 0, y: 270, z: 0 } // Rotate cabinet
+            },
+            // {
+            //     objPath: 'resources/models/kitchenCabinet/kitchenCabinet.obj',
+            //     mtlPath: 'resources/models/kitchenCabinet/kitchenCabinet.mtl',
+            //     position: { x: -2, y: 0, z: 0 } // Move another cabinet to the left
+            // }
+        ];
+        function loadObjects(scene) {
+            const mtlLoader = new MTLLoader();
+
+            objectsToLoad.forEach(({ objPath, mtlPath, position, scale, rotation }) => {
+                console.log(`Loading: ${mtlPath}`);
+                
+                mtlLoader.load(mtlPath, (mtl) => {
+                    console.log(`Loaded MTL: ${mtlPath}`);
+                    mtl.preload();
+
+                    const objLoader = new OBJLoader();
+                    objLoader.setMaterials(mtl);
+
+                    console.log(`Loading OBJ: ${objPath}`);
+                    objLoader.load(objPath, (object) => {
+                        console.log(`Loaded OBJ: ${objPath}`);
+                        
+                        // Set position
+                        object.position.set(position.x, position.y, position.z);
+
+                        // Set scale (if defined)
+                        if (scale) {
+                            object.scale.set(scale.x, scale.y, scale.z);
+                        }
+
+                        // Set rotation (Three.js uses radians)
+                        if (rotation) {
+                            object.rotation.set(
+                                THREE.MathUtils.degToRad(rotation.x), 
+                                THREE.MathUtils.degToRad(rotation.y), 
+                                THREE.MathUtils.degToRad(rotation.z)
+                            );
+                        }
+
+                        scene.add(object);
+                    }, undefined, (error) => {
+                        console.error(`Error loading OBJ: ${objPath}`, error);
+                    });
+
+                }, undefined, (error) => {
+                    console.error(`Error loading MTL: ${mtlPath}`, error);
+                });
+            });
         }
 
+
+
+
+        loadObjects(scene);
 
         function render(time) {
 
