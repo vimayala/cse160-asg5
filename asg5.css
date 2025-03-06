@@ -20,3 +20,11 @@
     transform-origin: top left;
     transform: scaleX(0);
 }
+
+/* canvas {
+    display: block;
+    margin: 0 auto;
+    border: 1px solid black;
+    width: 700px;
+    height: 700px;
+} */

@@ -24,19 +24,54 @@
 
 <script type="module">
     import * as THREE from 'three';
+    import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
+    import {OBJLoader} from 'three/addons/loaders/OBJLoader.js';
+    import {MTLLoader} from 'three/addons/loaders/MTLLoader.js'
 
     function main() {
         const canvas = document.querySelector('#c');
         const renderer = new THREE.WebGLRenderer( { antialias: true, canvas } );
+        renderer.setPixelRatio(window.devicePixelRatio); // Fix blurry rendering
+        renderer.setSize(window.innerWidth, window.innerHeight); // Fullscreen size
 
         const fov = 75;
         const aspect = 2;
         const near = 0.1;
         const far = 5;
-        const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
+        // const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
+
+        // Asked ChatGPT to help with resizing the canvas here
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 100);
+        window.addEventListener('resize', () => {
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix(); // Recalculate projection
+        });
         camera.position.z = 2;
 
+        const controls = new OrbitControls( camera, canvas );
+        controls.target.set( 0, 0, 0 );
+        controls.update();
+
+
         const scene = new THREE.Scene();
+        scene.background = new THREE.Color( 'black' );
+
+        // Define lighting
+
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
+        scene.add(ambientLight);
+
+
+        // const directionalColor1 = ;
+        const intensity = 1;
+        const light = new THREE.DirectionalLight(0xFFFFFF, intensity);
+        light.position.set(0, 10, 0);
+        light.target.position.set(-5, 0, 0);
+        scene.add(light);
+        scene.add(light.target);
+
+
         const boxWidth = 1;
         const boxHeight = 1;
         const boxDepth = 1;
@@ -55,8 +90,8 @@
         loadManager.onLoad = () => {
             loadingElem.style.display = 'none'; // Hide loading screen
             const cube = new THREE.Mesh(geometry, materials);
-            scene.add(cube);
-            cubes.push(cube);
+            // scene.add(cube);
+            // cubes.push(cube);
         };
 
         loadManager.onProgress = (path, loaded, total) => {
@@ -64,19 +99,41 @@
             progressBarElem.style.width = `${progress * 100}%`;
         };
 
+
         const loader = new THREE.TextureLoader(loadManager);
         const texturePaths = [
-            'lib/flower-1.jpg',
-            'lib/flower-2.jpg',
-            'lib/flower-3.jpg',
-            'lib/flower-4.jpg',
-            'lib/flower-5.jpg',
-            'lib/flower-6.jpg'
+            'resources/img/flower-1.jpg',
+            'resources/img/flower-2.jpg',
+            'resources/img/flower-3.jpg',
+            'resources/img/flower-4.jpg',
+            'resources/img/flower-5.jpg',
+            'resources/img/flower-6.jpg'
         ];
 
         const materials = texturePaths.map(path => 
             new THREE.MeshBasicMaterial({ map: loader.load(path) })
         );
+
+
+
+        {
+
+        const mtlLoader = new MTLLoader();
+        mtlLoader.load( 'resources/models/kitchenCabinet/kitchenCabinet.mtl', ( mtl ) => {
+
+            mtl.preload();
+            const objLoader = new OBJLoader();
+            objLoader.setMaterials( mtl );
+            objLoader.load( 'resources/models/kitchenCabinet/kitchenCabinet.obj', ( root ) => {
+
+                scene.add( root );
+
+            } );
+
+        } );
+
+        }
+
 
         function render(time) {
             time *= 0.001;
