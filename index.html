@@ -41,25 +41,27 @@
         // const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
 
         // Asked ChatGPT to help with resizing the canvas here
-        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 100);
+        const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 100);
         window.addEventListener('resize', () => {
             renderer.setSize(window.innerWidth, window.innerHeight);
             camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix(); // Recalculate projection
         });
-        camera.position.z = 2;
+        camera.position.x = 10.5;
+        camera.position.y = 10.5;
+        camera.position.z = 13;
 
         const controls = new OrbitControls( camera, canvas );
-        controls.target.set( 0, 0, 0 );
+        controls.target.set( 2.5, 5, 3 );
         controls.update();
 
 
         const scene = new THREE.Scene();
-        scene.background = new THREE.Color( 'black' );
+        scene.background = new THREE.Color( 'white' );
 
         // Define lighting
 
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.9);
         scene.add(ambientLight);
 
 
@@ -119,12 +121,12 @@
         {
 
         const mtlLoader = new MTLLoader();
-        mtlLoader.load( 'resources/models/kitchenCabinet/kitchenCabinet.mtl', ( mtl ) => {
+        mtlLoader.load( 'resources/models/room/kitchenRoom.mtl', ( mtl ) => {
 
             mtl.preload();
             const objLoader = new OBJLoader();
             objLoader.setMaterials( mtl );
-            objLoader.load( 'resources/models/kitchenCabinet/kitchenCabinet.obj', ( root ) => {
+            objLoader.load( 'resources/models/room/kitchenRoom.obj', ( root ) => {
 
                 scene.add( root );
 
@@ -136,6 +138,7 @@
 
 
         function render(time) {
+
             time *= 0.001;
 
             cubes.forEach(cube => {
