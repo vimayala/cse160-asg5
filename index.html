@@ -82,7 +82,31 @@
         const geometry = new THREE.BoxGeometry(boxWidth, boxHeight, boxDepth);
 
         // Define cubes holder
-        const cubes = [];
+        const cubes = [
+
+        ];
+
+
+
+        const shelfWidth = 7;  // Make shelves wider
+        const shelfHeight = 0.375; // Make shelves thin
+        const shelfDepth = 2;  // Make shelves deep enough
+
+        const shelfGeometry = new THREE.BoxGeometry(shelfWidth, shelfHeight, shelfDepth);
+
+        const material = new THREE.MeshStandardMaterial({ color: 0xeddfc7 }); // Brown wood-like color
+        const againstWallZ = -4.125
+        const shelves = [
+            { x: 0, y: 4.5, z: againstWallZ },  // First shelf (higher)
+            { x: 0, y: 6.5, z: againstWallZ },  // Second shelf (middle)
+            { x: 0, y: 8.5, z: againstWallZ }   // Third shelf (bottom)
+        ];
+
+        shelves.forEach(({ x, y, z }) => {
+            const shelf = new THREE.Mesh(shelfGeometry, material);
+            shelf.position.set(x, y, z); // Move each shelf to the correct position
+            scene.add(shelf);
+        });
 
         // Loading Manager
         const loadManager = new THREE.LoadingManager();
@@ -94,8 +118,8 @@
         loadManager.onLoad = () => {
             loadingElem.style.display = 'none'; // Hide loading screen
             const cube = new THREE.Mesh(geometry, materials);
-            // scene.add(cube);
-            // cubes.push(cube);
+            scene.add(cube);
+            cubes.push(cube);
         };
 
         loadManager.onProgress = (path, loaded, total) => {
@@ -237,19 +261,18 @@
             });
         }
 
-
-
-
         loadObjects(scene);
 
         function render(time) {
 
             time *= 0.001;
 
-            cubes.forEach(cube => {
-                cube.rotation.x = time;
-                cube.rotation.y = time;
-            });
+            // cubes.forEach(cube => {
+            //     cube.rotation.x = time;
+            //     cube.rotation.y = time;
+            // });
+
+            // Place animation in here
 
             renderer.render(scene, camera);
             requestAnimationFrame(render);
