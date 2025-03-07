@@ -119,8 +119,6 @@
         ];
 
 
-
-
         const cylinders = [
             { x: 0, y: 5, z: againstWallZ, 
                 radiusT: 0.35, 
@@ -167,6 +165,42 @@
             const box = new THREE.Mesh(boxGeometry, boxMaterial);
             box.position.set(x, y, z);
             scene.add(box);
+        });
+
+
+        const spheres = [
+            { x: 0.33, y: 3.25, z: -3.33, 
+                radius: 0.25,
+                widthSeg: 16, 
+                heightSeg: 16,
+                color: 0xff0000 
+            },
+            { x: -4, y: 3.5, z: -4, 
+                radius: 0.2,
+                widthSeg: 16, 
+                heightSeg: 16,
+                color: 0xf7b54a
+            },
+            { x: -4.2, y: 3.5, z: -3.8, 
+                radius: 0.2,
+                widthSeg: 16, 
+                heightSeg: 16,
+                color: 0xf7b54a
+            },
+            { x: -4.2, y: 3.5, z: -3.5, 
+                radius: 0.2,
+                widthSeg: 16, 
+                heightSeg: 16,
+                color: 0xf7de83
+            },
+        ];
+
+        spheres.forEach(({ x, y, z, radius, widthSeg, heightSeg, color }) => {
+            const sphereGeometry = new THREE.SphereGeometry(radius, widthSeg, heightSeg);
+            const sphereMaterial = new THREE.MeshBasicMaterial({ color });
+            const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
+            sphere.position.set(x, y, z);
+            scene.add(sphere);
         });
 
         // const cylinders = [
@@ -240,44 +274,89 @@
             {
                 objPath: 'resources/models/kitchenCabinet/kitchenCabinet.obj',
                 mtlPath: 'resources/models/kitchenCabinet/kitchenCabinet.mtl',
-                position: { x: 0.75, y: 0, z: -1.95 }, // Move cabinet to the right
-                scale: { x: 7, y: 7, z: 7 }, // Scale cabinet
-                rotation: { x: 0, y: 180, z: 0 } // Rotate cabinet
+                position: { x: 0.75, y: 0, z: -1.95 }, 
+                scale: { x: 7, y: 7, z: 7 }, 
+                rotation: { x: 0, y: 180, z: 0 } 
             },
             {
                 objPath: 'resources/models/kitchenCabinet/kitchenCabinet.obj',
                 mtlPath: 'resources/models/kitchenCabinet/kitchenCabinet.mtl',
-                position: { x: -2.25, y: 0, z: -1.95 }, // Move cabinet to the right
-                scale: { x: 7, y: 7, z: 7 }, // Scale cabinet
-                rotation: { x: 0, y: 180, z: 0 } // Rotate cabinet
+                position: { x: -2.25, y: 0, z: -1.95 }, 
+                scale: { x: 7, y: 7, z: 7 }, 
+                rotation: { x: 0, y: 180, z: 0 } 
             },
             {
                 objPath: 'resources/models/kitchenCabinet/kitchenCabinet.obj',
                 mtlPath: 'resources/models/kitchenCabinet/kitchenCabinet.mtl',
-                position: { x: -5.25, y: 0, z: -1.95 }, // Move cabinet to the right
-                scale: { x: 7, y: 7, z: 7 }, // Scale cabinet
-                rotation: { x: 0, y: 180, z: 0 } // Rotate cabinet
+                position: { x: -5.25, y: 0, z: -1.95 }, 
+                scale: { x: 7, y: 7, z: 7 }, 
+                rotation: { x: 0, y: 180, z: 0 } 
             },
             {
                 objPath: 'resources/models/kitchenCabinet/kitchenCabinet.obj',
                 mtlPath: 'resources/models/kitchenCabinet/kitchenCabinet.mtl',
-                position: { x: -2.25, y: 0, z: -1.95 }, // Move cabinet to the right
-                scale: { x: 7, y: 7, z: 7 }, // Scale cabinet
-                rotation: { x: 0, y: 270, z: 0 } // Rotate cabinet
+                position: { x: -2.25, y: 0, z: -1.95 }, 
+                scale: { x: 7, y: 7, z: 7 }, 
+                rotation: { x: 0, y: 270, z: 0 } 
             },
             {
                 objPath: 'resources/models/kitchenCabinet/kitchenCabinet.obj',
                 mtlPath: 'resources/models/kitchenCabinet/kitchenCabinet.mtl',
-                position: { x: -2.25, y: 0, z: 1 }, // Move cabinet to the right
-                scale: { x: 7, y: 7, z: 7 }, // Scale cabinet
-                rotation: { x: 0, y: 270, z: 0 } // Rotate cabinet
+                position: { x: -2.25, y: 0, z: 1 }, 
+                scale: { x: 7, y: 7, z: 7 }, 
+                rotation: { x: 0, y: 270, z: 0 } 
             },
             {
                 objPath: 'resources/models/kitchenCabinet/kitchenCabinet.obj',
                 mtlPath: 'resources/models/kitchenCabinet/kitchenCabinet.mtl',
-                position: { x: -2.25, y: 0, z: 4 }, // Move cabinet to the right
-                scale: { x: 7, y: 7, z: 7 }, // Scale cabinet
-                rotation: { x: 0, y: 270, z: 0 } // Rotate cabinet
+                position: { x: -2.25, y: 0, z: 4 }, 
+                scale: { x: 7, y: 7, z: 7 }, 
+                rotation: { x: 0, y: 270, z: 0 } 
+            },
+            // Mason Jars
+            // {
+            //     objPath: 'resources/models/MasonJar/masonJar.obj',
+            //     mtlPath: 'resources/models/MasonJar/masonJar.mtl',
+            //     position: { x: 0, y: 4.625, z: -4 }, 
+            //     scale: { x: 0.2, y: 0.2, z: 0.2 }, 
+            //     rotation: { x: 0, y: 0, z: 0 } 
+            // },
+            {
+                objPath: 'resources/models/JamJar/CHAHIN_JAM_JAR.obj',
+                mtlPath: 'resources/models/JamJar/CHAHIN_JAM_JAR.mtl',
+                position: { x: -3, y: 5, z: -4 }, 
+                scale: { x: 0.5, y: 0.5, z: 0.5 }, 
+                rotation: { x: 0, y: 180, z: 0 } 
+            },
+            // Stacked Bowls
+            {
+                objPath: 'resources/models/Bowl/Bowl.obj',
+                mtlPath: 'resources/models/Bowl/Bowl.mtl',
+                position: { x: 2, y: 4.625, z: -3 }, 
+                scale: { x: 0.0125, y: 0.0125, z: 0.0125 }, 
+                rotation: { x: 270, y: 0, z: 0 } 
+            },
+            {
+                objPath: 'resources/models/Bowl/Bowl.obj',
+                mtlPath: 'resources/models/Bowl/Bowl.mtl',
+                position: { x: 2, y: 4.825, z: -3 }, 
+                scale: { x: 0.0125, y: 0.0125, z: 0.0125 }, 
+                rotation: { x: 270, y: 0, z: 0 } 
+            },
+            {
+                objPath: 'resources/models/Bowl/Bowl.obj',
+                mtlPath: 'resources/models/Bowl/Bowl.mtl',
+                position: { x: 2, y: 5.025, z: -3 }, 
+                scale: { x: 0.0125, y: 0.0125, z: 0.0125 }, 
+                rotation: { x: 270, y: 0, z: 0 } 
+            },
+            // For bowl of fruit
+            {
+                objPath: 'resources/models/Bowl/Bowl.obj',
+                mtlPath: 'resources/models/Bowl/Bowl.mtl',
+                position: { x: -5, y: 3, z: -3 }, 
+                scale: { x: 0.0125, y: 0.0125, z: 0.0125 }, 
+                rotation: { x: 270, y: 0, z: 0 } 
             },
             // {
             //     objPath: 'resources/models/kitchenCabinet/kitchenCabinet.obj',
