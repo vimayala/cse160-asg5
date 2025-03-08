@@ -11,6 +11,56 @@ import { RectAreaLightHelper } from 'three/addons/helpers/RectAreaLightHelper.js
 
 
 function main() {
+    class PickHelper {
+        constructor() {
+          this.raycaster = new THREE.Raycaster();
+          this.pickedObject = null;
+          this.pickedObjectSavedColor = 0;
+        }
+        pick(normalizedPosition, scene, camera, time) {
+          // restore the color if there is a picked object
+        //   if (this.pickedObject) {
+        //     this.pickedObject.material.emissive.setHex(this.pickedObjectSavedColor);
+        //     this.pickedObject = undefined;
+        //   }
+        if (this.pickedObject && this.pickedObject.material && "emissive" in this.pickedObject.material) {
+            this.pickedObject.material.emissive.setHex(this.pickedObjectSavedColor);
+        }
+        
+       
+          // cast a ray through the frustum
+          this.raycaster.setFromCamera(normalizedPosition, camera);
+          // get the list of objects the ray intersected
+          const intersectedObjects = this.raycaster.intersectObjects(scene.children);
+        //   if (intersectedObjects.length) {
+        //     // pick the first object. It's the closest one
+        //     this.pickedObject = intersectedObjects[0].object;
+        //     // save its color
+        //     this.pickedObjectSavedColor = this.pickedObject.material.emissive.getHex();
+        //     // set its emissive color to flashing red/yellow
+        //     this.pickedObject.material.emissive.setHex((time * 8) % 2 > 1 ? 0xFFFF00 : 0xFF0000);
+        //   }
+        if (intersectedObjects.length) {
+            this.pickedObject = intersectedObjects[0].object;
+        
+            if (this.pickedObject.material && 'emissive' in this.pickedObject.material) {
+                this.pickedObjectSavedColor = this.pickedObject.material.emissive.getHex();
+                this.pickedObject.material.emissive.setHex((time * 8) % 2 > 1 ? 0xFFFF00 : 0xFF0000);
+            }
+        }
+        
+        }
+      }
+    
+ 
+function getCanvasRelativePosition(event) {
+    const rect = canvas.getBoundingClientRect();
+    return {
+      x: (event.clientX - rect.left) * canvas.width  / rect.width,
+      y: (event.clientY - rect.top ) * canvas.height / rect.height,
+    };
+  }
+   
 
     // Set up the canvas
     const canvas = document.querySelector('#c');
@@ -32,6 +82,7 @@ function main() {
     const far = 100;
     // Asked ChatGPT to help with resizing the canvas here
     const camera = new THREE.PerspectiveCamera(fov, window.innerWidth / window.innerHeight, near, far);
+    
 
     // const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 100);
     window.addEventListener('resize', () => {
@@ -68,6 +119,36 @@ function main() {
 
     // Set up the scene
     const scene = new THREE.Scene();
+    const pickHelper = new PickHelper();
+
+    const pickPosition = {x: 0, y: 0};
+    clearPickPosition();
+
+
+
+    function setPickPosition(event) {
+        const pos = getCanvasRelativePosition(event);
+        pickPosition.x = (pos.x / canvas.width ) *  2 - 1;
+        pickPosition.y = (pos.y / canvas.height) * -2 + 1;  // note we flip Y
+      }
+       
+      function clearPickPosition() {
+        // unlike the mouse which always has a position
+        // if the user stops touching the screen we want
+        // to stop picking. For now we just pick a value
+        // unlikely to pick something
+        pickPosition.x = -100000;
+        pickPosition.y = -100000;
+      }
+
+    window.addEventListener('mousemove', setPickPosition);
+    window.addEventListener('mouseout', clearPickPosition);
+    window.addEventListener('mouseleave', clearPickPosition);
+
+       
+
+    // scene.fog = new THREE.Fog(0xff00ff, near, far);
+
     // {
     //     const loader = new THREE.CubeTextureLoader();
     //     const texture = loader.load([
@@ -107,6 +188,14 @@ function main() {
     const ambientLight = new THREE.AmbientLight(0xffffff, 1.5);
     scene.add(ambientLight);
 
+    // const lightK = new THREE.DirectionalLight(0xFFFFFF, 0.4);
+    // lightK.position.set(-5, 4, -5);
+    // lightK.target.position.set(5, 0, 5);
+    // scene.add(lightK);
+    // scene.add(lightK.target);
+
+    //     const lightHelper = new DirectionalLightHelper(lightK, 2);
+    // scene.add(lightHelper);
 
     const light1 = new THREE.DirectionalLight(0xFFFFFF, 1);
     light1.position.set(0, 9, 0);
@@ -169,7 +258,7 @@ function main() {
 
     const shelfGeometry = new THREE.BoxGeometry(shelfWidth, shelfHeight, shelfDepth);
 
-    const material = new THREE.MeshStandardMaterial({ color: 0xeddfc7 });
+    const material = new THREE.MeshStandardMaterial({ color: 0xede2ce });
     const againstWallZ = -4.125
     const shelves = [
         { x: 0, y: 4.5, z: againstWallZ },
@@ -457,6 +546,8 @@ function main() {
         });
     }
 
+    
+
     loadObjects(scene);
 
     function render(time) {
@@ -479,7 +570,8 @@ function main() {
        
         // bgTexture.offset.y = aspect > 1 ? 0 : (1 - aspect) / 2;
         // bgTexture.repeat.y = aspect > 1 ? 1 : aspect;
-        
+        pickHelper.pick(pickPosition, scene, camera, time);
+
         renderer.render(scene, camera);
         requestAnimationFrame(render);
 
@@ -488,5 +580,7 @@ function main() {
 
     requestAnimationFrame(render);
 }
+
+
 
 main();
