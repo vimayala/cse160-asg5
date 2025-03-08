@@ -38,9 +38,13 @@ function main() {
     });
 
     // Set up the camera position
-    camera.position.x = 10.5;
-    camera.position.y = 10.5;
-    camera.position.z = 13;
+    // camera.position.x = 10.5;
+    // camera.position.y = 10.5;
+    // camera.position.z = 13;
+
+    camera.position.x = -13.67;
+    camera.position.y = 8;
+    camera.position.z = -14.9;
 
     // Allow orbit controls
     const controls = new OrbitControls( camera, canvas );
@@ -61,29 +65,31 @@ function main() {
 
     // Set up the scene
     const scene = new THREE.Scene();
-    {
-        const loader = new THREE.CubeTextureLoader();
-        const texture = loader.load([
-          'resources/img/cubemaps/px.png',
-          'resources/img/cubemaps/nx.png',
-          'resources/img/cubemaps/py.png',
-          'resources/img/cubemaps/ny.png',
-          'resources/img/cubemaps/pz.png',
-          'resources/img/cubemaps/nz.png',
-        ]);
-        scene.background = texture;
-      }
-
     // {
-    //     const skyLoader = new THREE.TextureLoader();
-    //     const texture = skyLoader.load(
-    //       'resources/img/cubemaps/tears_of_steel_bridge_2k.jpg',
-    //       () => {
-    //         texture.mapping = THREE.EquirectangularReflectionMapping;
-    //         texture.colorSpace = THREE.SRGBColorSpace;
-    //         scene.background = texture;
-    //       });
-    // }
+    //     const loader = new THREE.CubeTextureLoader();
+    //     const texture = loader.load([
+    //       'resources/img/cubemaps/Standard-Cube-Map/px.png',
+    //       'resources/img/cubemaps/Standard-Cube-Map/nx.png',
+    //       'resources/img/cubemaps/Standard-Cube-Map/py.png',
+    //       'resources/img/cubemaps/Standard-Cube-Map/ny.png',
+    //       'resources/img/cubemaps/Standard-Cube-Map/pz.png',
+    //       'resources/img/cubemaps/Standard-Cube-Map/nz.png',
+    //     ]);
+    //     scene.background = texture;
+    //   }
+
+    {
+        const skyLoader = new THREE.TextureLoader();
+        const texture = skyLoader.load(
+          'resources/img/cubemaps/whiteRoom.jpg',
+          () => {
+            texture.mapping = THREE.EquirectangularReflectionMapping;
+            texture.colorSpace = THREE.SRGBColorSpace;
+            scene.background = texture;
+            scene.rotateOnAxis(new THREE.Vector3(0, 1, 0), Math.PI);
+          });
+
+    }
 
     // scene.background = new THREE.Color( 'white' );
 
@@ -433,6 +439,7 @@ function main() {
     function render(time) {
 
         time *= 0.001;
+        // console.log(camera.position);
 
         // cubes.forEach(cube => {
         //     cube.rotation.x = time;
