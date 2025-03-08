@@ -8,9 +8,10 @@ import { GUI } from 'three/addons/libs/lil-gui.module.min.js';
 import { RectAreaLightUniformsLib } from 'three/addons/lights/RectAreaLightUniformsLib.js';
 import { RectAreaLightHelper } from 'three/addons/helpers/RectAreaLightHelper.js';
 
-
+// /Users/victoria/Documents/CSE 160/cse160-asg5/src/pick.js
 
 function main() {
+    const pickToggle = true;
     class PickHelper {
         constructor() {
           this.raycaster = new THREE.Raycaster();
@@ -357,24 +358,27 @@ function getCanvasRelativePosition(event) {
 
 
         shelves.forEach(({ x, y, z }) => {
-        const shelf = new THREE.Mesh(shelfGeometry, material);
-        shelf.position.set(x, y, z);
-        scene.add(shelf);
+            const shelf = new THREE.Mesh(shelfGeometry, material);
+            shelf.position.set(x, y, z);
+            scene.add(shelf);
         });
 
 
         cylinders.forEach(({ x, y, z, radiusT, radiusB, height, color }) => {
-        const cylinderGeometry = new THREE.CylinderGeometry(radiusT, radiusB, height, 15);
-        const cylinderMaterial = new THREE.MeshBasicMaterial({ color });
+            const cylinderGeometry = new THREE.CylinderGeometry(radiusT, radiusB, height, 15);
+            const cylinderMaterial = new THREE.MeshStandardMaterial({ color });
 
-        const cylinder = new THREE.Mesh(cylinderGeometry, cylinderMaterial);
-        cylinder.position.set(x, y, z);
-        scene.add(cylinder);
+            const cylinder = new THREE.Mesh(cylinderGeometry, cylinderMaterial);
+            cylinder.position.set(x, y, z);
+            scene.add(cylinder);
         });
 
         boxes.forEach(({ x, y, z, width, height, depth, color }) => {
             const boxGeometry = new THREE.BoxGeometry(width, height, depth);
-            const boxMaterial = new THREE.MeshBasicMaterial({ color });
+            // const boxMaterial = new THREE.MeshBasicMaterial({ color });
+            const boxMaterial = new THREE.MeshStandardMaterial({ color });
+
+            
 
             const box = new THREE.Mesh(boxGeometry, boxMaterial);
             box.position.set(x, y, z);
@@ -383,7 +387,7 @@ function getCanvasRelativePosition(event) {
         
         spheres.forEach(({ x, y, z, radius, widthSeg, heightSeg, color }) => {
             const sphereGeometry = new THREE.SphereGeometry(radius, widthSeg, heightSeg);
-            const sphereMaterial = new THREE.MeshBasicMaterial({ color });
+            const sphereMaterial = new THREE.MeshStandardMaterial({ color });
             const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
             sphere.position.set(x, y, z);
             scene.add(sphere);
@@ -419,43 +423,43 @@ function getCanvasRelativePosition(event) {
             position: { x: 0, y: 0, z: 0 }
         },
         {
-            objPath: 'resources/models/kitchenCabinet/kitchenCabinet.obj',
-            mtlPath: 'resources/models/kitchenCabinet/kitchenCabinet.mtl',
+            objPath: 'resources/models/kitchenCabinet/cabinet.obj',
+            mtlPath: 'resources/models/kitchenCabinet/cabinet.mtl',
             position: { x: 0.75, y: 0, z: -1.95 }, 
             scale: { x: 7, y: 7, z: 7 }, 
             rotation: { x: 0, y: 180, z: 0 } 
         },
         {
-            objPath: 'resources/models/kitchenCabinet/kitchenCabinet.obj',
-            mtlPath: 'resources/models/kitchenCabinet/kitchenCabinet.mtl',
+            objPath: 'resources/models/kitchenCabinet/cabinet.obj',
+            mtlPath: 'resources/models/kitchenCabinet/cabinet.mtl',
             position: { x: -2.25, y: 0, z: -1.95 }, 
             scale: { x: 7, y: 7, z: 7 }, 
             rotation: { x: 0, y: 180, z: 0 } 
         },
         {
-            objPath: 'resources/models/kitchenCabinet/kitchenCabinet.obj',
-            mtlPath: 'resources/models/kitchenCabinet/kitchenCabinet.mtl',
+            objPath: 'resources/models/kitchenCabinet/cabinet.obj',
+            mtlPath: 'resources/models/kitchenCabinet/cabinet.mtl',
             position: { x: -5.25, y: 0, z: -1.95 }, 
             scale: { x: 7, y: 7, z: 7 }, 
             rotation: { x: 0, y: 180, z: 0 } 
         },
         {
-            objPath: 'resources/models/kitchenCabinet/kitchenCabinet.obj',
-            mtlPath: 'resources/models/kitchenCabinet/kitchenCabinet.mtl',
+            objPath: 'resources/models/kitchenCabinet/cabinet.obj',
+            mtlPath: 'resources/models/kitchenCabinet/cabinet.mtl',
             position: { x: -2.25, y: 0, z: -1.95 }, 
             scale: { x: 7, y: 7, z: 7 }, 
             rotation: { x: 0, y: 270, z: 0 } 
         },
         {
-            objPath: 'resources/models/kitchenCabinet/kitchenCabinet.obj',
-            mtlPath: 'resources/models/kitchenCabinet/kitchenCabinet.mtl',
+            objPath: 'resources/models/kitchenCabinet/cabinet.obj',
+            mtlPath: 'resources/models/kitchenCabinet/cabinet.mtl',
             position: { x: -2.25, y: 0, z: 1 }, 
             scale: { x: 7, y: 7, z: 7 }, 
             rotation: { x: 0, y: 270, z: 0 } 
         },
         {
-            objPath: 'resources/models/kitchenCabinet/kitchenCabinet.obj',
-            mtlPath: 'resources/models/kitchenCabinet/kitchenCabinet.mtl',
+            objPath: 'resources/models/kitchenCabinet/cabinet.obj',
+            mtlPath: 'resources/models/kitchenCabinet/cabinet.mtl',
             position: { x: -2.25, y: 0, z: 4 }, 
             scale: { x: 7, y: 7, z: 7 }, 
             rotation: { x: 0, y: 270, z: 0 } 
@@ -503,6 +507,7 @@ function getCanvasRelativePosition(event) {
         //     position: { x: -2, y: 0, z: 0 } // Move another cabinet to the left
         // }
     ];
+
     function loadObjects(scene) {
         const mtlLoader = new MTLLoader();
 
@@ -570,7 +575,9 @@ function getCanvasRelativePosition(event) {
        
         // bgTexture.offset.y = aspect > 1 ? 0 : (1 - aspect) / 2;
         // bgTexture.repeat.y = aspect > 1 ? 1 : aspect;
-        pickHelper.pick(pickPosition, scene, camera, time);
+        if(pickToggle){
+            pickHelper.pick(pickPosition, scene, camera, time);
+        }
 
         renderer.render(scene, camera);
         requestAnimationFrame(render);
