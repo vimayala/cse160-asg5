@@ -11,9 +11,15 @@ function main() {
 
     // Set up the canvas
     const canvas = document.querySelector('#c');
-    const renderer = new THREE.WebGLRenderer( { antialias: true, canvas } );
+    // const renderer = new THREE.WebGLRenderer( { antialias: true, canvas } );
+    const renderer = new THREE.WebGLRenderer({
+        antialias: true,
+        canvas,
+        alpha: true,
+      });
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setSize(window.innerWidth, window.innerHeight);
+
 
 
     // Set up the camera
@@ -55,8 +61,36 @@ function main() {
 
     // Set up the scene
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color( 'white' );
-    
+    {
+        const loader = new THREE.CubeTextureLoader();
+        const texture = loader.load([
+          'resources/img/cubemaps/px.png',
+          'resources/img/cubemaps/nx.png',
+          'resources/img/cubemaps/py.png',
+          'resources/img/cubemaps/ny.png',
+          'resources/img/cubemaps/pz.png',
+          'resources/img/cubemaps/nz.png',
+        ]);
+        scene.background = texture;
+      }
+
+    // {
+    //     const skyLoader = new THREE.TextureLoader();
+    //     const texture = skyLoader.load(
+    //       'resources/img/cubemaps/tears_of_steel_bridge_2k.jpg',
+    //       () => {
+    //         texture.mapping = THREE.EquirectangularReflectionMapping;
+    //         texture.colorSpace = THREE.SRGBColorSpace;
+    //         scene.background = texture;
+    //       });
+    // }
+
+    // scene.background = new THREE.Color( 'white' );
+
+    // const skyLoader = new THREE.TextureLoader();
+    // const bgTexture = skyLoader.load('resources/img/daikanyama.jpg');
+    // bgTexture.colorSpace = THREE.SRGBColorSpace;
+    // scene.background = bgTexture;
 
     // Define ambient, directional, and helpers
     const ambientLight = new THREE.AmbientLight(0xffffff, 2.0);
@@ -385,9 +419,20 @@ function main() {
         // });
 
         // Place animation in here
-
+        // const canvasAspect = canvas.clientWidth / canvas.clientHeight;
+        // const imageAspect = bgTexture.image ? bgTexture.image.width / bgTexture.image.height : 1;
+        // const aspect = imageAspect / canvasAspect;
+       
+        // bgTexture.offset.x = aspect > 1 ? (1 - 1 / aspect) / 2 : 0;
+        // bgTexture.repeat.x = aspect > 1 ? 1 / aspect : 1;
+       
+        // bgTexture.offset.y = aspect > 1 ? 0 : (1 - aspect) / 2;
+        // bgTexture.repeat.y = aspect > 1 ? 1 : aspect;
+        
         renderer.render(scene, camera);
         requestAnimationFrame(render);
+
+        
     }
 
     requestAnimationFrame(render);
