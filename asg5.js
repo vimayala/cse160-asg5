@@ -5,6 +5,9 @@ import {MTLLoader} from 'three/addons/loaders/MTLLoader.js'
 // import { DirectionalLightHelper } from 'three/examples/jsm/helpers/DirectionalLightHelper.js';
 import { DirectionalLightHelper, AxesHelper } from 'three';
 import { GUI } from 'three/addons/libs/lil-gui.module.min.js';
+import { RectAreaLightUniformsLib } from 'three/addons/lights/RectAreaLightUniformsLib.js';
+import { RectAreaLightHelper } from 'three/addons/helpers/RectAreaLightHelper.js';
+
 
 
 function main() {
@@ -81,6 +84,8 @@ function main() {
     {
         const skyLoader = new THREE.TextureLoader();
         const texture = skyLoader.load(
+            // From 360cities.net
+            // https://www.360cities.net/image/high-street-apartments-360-panorama
           'resources/img/cubemaps/whiteRoom.jpg',
           () => {
             texture.mapping = THREE.EquirectangularReflectionMapping;
@@ -103,37 +108,55 @@ function main() {
     scene.add(ambientLight);
 
 
-    const light = new THREE.DirectionalLight(0xFFFFFF, 1);
-    light.position.set(0, 9, 0);
-    light.target.position.set(0, 5, 0);
-    scene.add(light);
-    scene.add(light.target);
-
-    // Create a helper for the light
-    const lightHelper = new DirectionalLightHelper(light, 2);
-    scene.add(lightHelper);
-
-    const axesHelper = new AxesHelper(2);
-    scene.add(axesHelper);
+    const light1 = new THREE.DirectionalLight(0xFFFFFF, 1);
+    light1.position.set(0, 9, 0);
+    light1.target.position.set(0, 11, 0);
+    scene.add(light1);
+    scene.add(light1.target);
 
 
-    // add point light
-    const pointLight = new THREE.PointLight(0xffffff, 2);
-    pointLight.position.set(0, 9, -1.25);
-    // pointLight.target.position.set(0, 5, 0);
-    scene.add(pointLight);
+    const light2 = new THREE.DirectionalLight(0xFFFFFF, 1);
+    light2.position.set(0, 9, 0);
+    light2.target.position.set(0, 5, 0);
+    scene.add(light2);
+    scene.add(light2.target);
 
-    const pointLight2 = new THREE.PointLight(0xffffff, 2);
-    pointLight2.position.set(0, 9, 0.75);
-    // pointLight.target.position.set(0, 5, 0);
-    scene.add(pointLight2);
 
-    const pointLight3 = new THREE.PointLight(0xffffff, 2);
-    pointLight3.position.set(0, 9, 2.625);
-    // pointLight.target.position.set(0, 5, 0);
-    scene.add(pointLight3);
-    // const helper = new THREE.PointLightHelper(pointLight);
-    // scene.add(helper);
+
+    // // Create a helper for the light
+    // const lightHelper = new DirectionalLightHelper(light1, 2);
+    // scene.add(lightHelper);
+
+    // const axesHelper = new AxesHelper(2);
+    // scene.add(axesHelper);
+
+    
+    const light = new THREE.RectAreaLight( 0xffffff, 1, 10, 8 );
+    light.position.set( 0, 10, 0 );
+    light.rotation.x = THREE.MathUtils.degToRad( - 90 );
+    scene.add( light );
+
+    // const helper = new RectAreaLightHelper( light );
+    // light.add( helper );
+
+
+    // // add point light
+    // const pointLight = new THREE.PointLight(0xffffff, 2);
+    // pointLight.position.set(0, 9, -1.25);
+    // // pointLight.target.position.set(0, 5, 0);
+    // scene.add(pointLight);
+
+    // const pointLight2 = new THREE.PointLight(0xffffff, 2);
+    // pointLight2.position.set(0, 9, 0.75);
+    // // pointLight.target.position.set(0, 5, 0);
+    // scene.add(pointLight2);
+
+    // const pointLight3 = new THREE.PointLight(0xffffff, 2);
+    // pointLight3.position.set(0, 9, 2.625);
+    // // pointLight.target.position.set(0, 5, 0);
+    // scene.add(pointLight3);
+    // // const helper = new THREE.PointLightHelper(pointLight);
+    // // scene.add(helper);
 
 
 
