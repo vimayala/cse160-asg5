@@ -93,7 +93,7 @@ function main() {
     // scene.background = bgTexture;
 
     // Define ambient, directional, and helpers
-    const ambientLight = new THREE.AmbientLight(0xffffff, 2.0);
+    const ambientLight = new THREE.AmbientLight(0xffffff, 1.5);
     scene.add(ambientLight);
 
 
@@ -109,6 +109,27 @@ function main() {
 
     const axesHelper = new AxesHelper(2);
     scene.add(axesHelper);
+
+
+    // add point light
+    const pointLight = new THREE.PointLight(0xffffff, 2);
+    pointLight.position.set(0, 9, -1.25);
+    // pointLight.target.position.set(0, 5, 0);
+    scene.add(pointLight);
+
+    const pointLight2 = new THREE.PointLight(0xffffff, 2);
+    pointLight2.position.set(0, 9, 0.75);
+    // pointLight.target.position.set(0, 5, 0);
+    scene.add(pointLight2);
+
+    const pointLight3 = new THREE.PointLight(0xffffff, 2);
+    pointLight3.position.set(0, 9, 2.625);
+    // pointLight.target.position.set(0, 5, 0);
+    scene.add(pointLight3);
+    // const helper = new THREE.PointLightHelper(pointLight);
+    // scene.add(helper);
+
+
 
 
 
