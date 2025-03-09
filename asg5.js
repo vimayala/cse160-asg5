@@ -270,7 +270,7 @@ function getCanvasRelativePosition(event) {
 
     // Define cube properties
     const boxWidth = 1;
-    const boxHeight = 0.5;
+    const boxHeight = 0.28;
     const boxDepth = 1.5;
     const geometry = new THREE.BoxGeometry(boxWidth, boxHeight, boxDepth);
 
@@ -285,26 +285,85 @@ function getCanvasRelativePosition(event) {
             height: 1, 
             color: 0xd46648 
         },
-        { x: -2.5, y: 7, z: againstWallZ, 
-            radiusT: 0.5, 
-            radiusB:0.5, 
-            height: 1, 
-            color: 0x4682b4 
-        },
         { x: 3, y: 8.85, z: againstWallZ, 
             radiusT: 0.3, 
             radiusB: 0.3, 
             height: 0.4, 
             color: 0x32a852 
-        }
+        },
+
+        // Pot
+        { x: -2.5, y: 6.9, z: againstWallZ, 
+            radiusT: 0.5, 
+            radiusB: 0.45, 
+            height: 0.5, 
+            color: 0xc4c4c4 
+        },
+        { x: -2.5, y: 7.125, z: againstWallZ, 
+            radiusT: 0.525, 
+            radiusB: 0.525, 
+            height: 0.125, 
+            color: 0xb8b8b8 
+        },
+        { x: -2.5, y: 7.2, z: againstWallZ, 
+            radiusT: 0.2, 
+            radiusB: 0.15, 
+            height: 0.2, 
+            color: 0xb8b8b8
+        },
+
+        // Paper towel + holder
+        { x: 3.3, y: 3.425, z: againstWallZ, 
+            radiusT: 0.3, 
+            radiusB: 0.3, 
+            height: 0.85, 
+            color: 0xf7f6f2
+        },
+        { x: 3.3, y: 3, z: againstWallZ, 
+            radiusT: 0.325, 
+            radiusB: 0.325, 
+            height: 0.075, 
+            color: 0x9c9c9c
+        },
     ];
 
     const boxes = [
+        // Fix walls
+        { x: -0.35, y: 5.25, z: -5.75, 
+            width: 11,
+            height: 11, 
+            depth: 0.275,
+            color: 0xffffff 
+        },
+        { x: -5.75, y: 5.25, z: 0, 
+            width: 0.275,
+            height: 11, 
+            depth: 11,
+            color: 0xffffff
+        },
+
+        //Random box on shelf
         { x: 1, y: 5.25, z: againstWallZ, 
             width: 0.5,
             height: 1.5, 
             depth: 1,
             color: 0xffaaff 
+        },
+
+        // Pot handle
+        { x: -3.3, y: 7, z: againstWallZ, 
+            width: 1,
+            height: 0.125, 
+            depth: 0.1725,
+            color: 0xb8b8b8
+        },
+
+        // Paper towel holder stick
+        { x: 3.3, y: 3.425, z: againstWallZ, 
+            width: 0.125,
+            height: 1, 
+            depth: 0.125,
+            color: 0x9c9c9c
         },
     ];
 
@@ -353,7 +412,7 @@ function getCanvasRelativePosition(event) {
     loadManager.onLoad = () => {
         loadingElem.style.display = 'none'; // Hide loading screen
         const cube = new THREE.Mesh(geometry, materials);
-        cube.position.set(-1, 3, -3);
+        cube.position.set(-1, 3.0725, -3);
         cube.rotateOnWorldAxis(new THREE.Vector3(0, 0.5, 0), Math.PI / 4);
         scene.add(cube);
         
@@ -403,7 +462,7 @@ function getCanvasRelativePosition(event) {
         progressBarElem.style.width = `${progress * 100}%`;
     };
 
-
+    // Recipe book (custom)
     const loader = new THREE.TextureLoader(loadManager);
     const texturePaths = [
         'resources/img/book/side.jpg',         // front
@@ -426,22 +485,22 @@ function getCanvasRelativePosition(event) {
             position: { x: 0, y: 0, z: 0 }
         },
         {
-            objPath: 'resources/models/kitchenCabinet/cabinet.obj',
-            mtlPath: 'resources/models/kitchenCabinet/cabinet.mtl',
+            objPath: 'resources/models/KitchenCabinetDrawer/kitchenCabinetDrawer.obj',
+            mtlPath: 'resources/models/KitchenCabinetDrawer/kitchenCabinetDrawer.mtl',
             position: { x: 0.75, y: 0, z: -1.95 }, 
             scale: { x: 7, y: 7, z: 7 }, 
             rotation: { x: 0, y: 180, z: 0 } 
         },
         {
-            objPath: 'resources/models/kitchenCabinet/cabinet.obj',
-            mtlPath: 'resources/models/kitchenCabinet/cabinet.mtl',
+            objPath: 'resources/models/KitchenCabinetDrawer/kitchenCabinetDrawer.obj',
+            mtlPath: 'resources/models/KitchenCabinetDrawer/kitchenCabinetDrawer.mtl',
             position: { x: -2.25, y: 0, z: -1.95 }, 
             scale: { x: 7, y: 7, z: 7 }, 
             rotation: { x: 0, y: 180, z: 0 } 
         },
         {
-            objPath: 'resources/models/kitchenCabinet/cabinet.obj',
-            mtlPath: 'resources/models/kitchenCabinet/cabinet.mtl',
+            objPath: 'resources/models/KitchenCabinetDrawer/kitchenCabinetDrawer.obj',
+            mtlPath: 'resources/models/KitchenCabinetDrawer/kitchenCabinetDrawer.mtl',
             position: { x: -5.25, y: 0, z: -1.95 }, 
             scale: { x: 7, y: 7, z: 7 }, 
             rotation: { x: 0, y: 180, z: 0 } 
@@ -454,19 +513,28 @@ function getCanvasRelativePosition(event) {
             rotation: { x: 0, y: 270, z: 0 } 
         },
         {
-            objPath: 'resources/models/kitchenCabinet/cabinet.obj',
-            mtlPath: 'resources/models/kitchenCabinet/cabinet.mtl',
-            position: { x: -2.25, y: 0, z: 1 }, 
+            objPath: 'resources/models/KitchenSink/kitchenSink.obj',
+            mtlPath: 'resources/models/KitchenSink/kitchenSink.mtl',
+            position: { x: -2.25, y: 0, z: 1.05 }, 
             scale: { x: 7, y: 7, z: 7 }, 
             rotation: { x: 0, y: 270, z: 0 } 
         },
+        // {
+        //     objPath: 'resources/models/kitchenCabinet/cabinet.obj',
+        //     mtlPath: 'resources/models/kitchenCabinet/cabinet.mtl',
+        //     position: { x: -2.25, y: 0, z: 4 }, 
+        //     scale: { x: 7, y: 7, z: 7 }, 
+        //     rotation: { x: 0, y: 270, z: 0 } 
+        // },
+
         {
-            objPath: 'resources/models/kitchenCabinet/cabinet.obj',
-            mtlPath: 'resources/models/kitchenCabinet/cabinet.mtl',
+            objPath: 'resources/models/KitchenStove/kitchenStove.obj',
+            mtlPath: 'resources/models/KitchenStove/stove.mtl',
             position: { x: -2.25, y: 0, z: 4 }, 
             scale: { x: 7, y: 7, z: 7 }, 
             rotation: { x: 0, y: 270, z: 0 } 
-        },
+        }, 
+
         {
             objPath: 'resources/models/JamJar/CHAHIN_JAM_JAR.obj',
             mtlPath: 'resources/models/JamJar/CHAHIN_JAM_JAR.mtl',
