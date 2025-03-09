@@ -10,6 +10,8 @@ import { RectAreaLightHelper } from 'three/addons/helpers/RectAreaLightHelper.js
 
 // /Users/victoria/Documents/CSE 160/cse160-asg5/src/pick.js
 
+
+// Adjusted from helper linked site with ChatGPT
 function main() {
     const pickToggle = true;
     class PickHelper {
@@ -19,28 +21,12 @@ function main() {
           this.pickedObjectSavedColor = 0;
         }
         pick(normalizedPosition, scene, camera, time) {
-          // restore the color if there is a picked object
-        //   if (this.pickedObject) {
-        //     this.pickedObject.material.emissive.setHex(this.pickedObjectSavedColor);
-        //     this.pickedObject = undefined;
-        //   }
         if (this.pickedObject && this.pickedObject.material && "emissive" in this.pickedObject.material) {
             this.pickedObject.material.emissive.setHex(this.pickedObjectSavedColor);
         }
         
-       
-          // cast a ray through the frustum
-          this.raycaster.setFromCamera(normalizedPosition, camera);
-          // get the list of objects the ray intersected
+        this.raycaster.setFromCamera(normalizedPosition, camera);
           const intersectedObjects = this.raycaster.intersectObjects(scene.children);
-        //   if (intersectedObjects.length) {
-        //     // pick the first object. It's the closest one
-        //     this.pickedObject = intersectedObjects[0].object;
-        //     // save its color
-        //     this.pickedObjectSavedColor = this.pickedObject.material.emissive.getHex();
-        //     // set its emissive color to flashing red/yellow
-        //     this.pickedObject.material.emissive.setHex((time * 8) % 2 > 1 ? 0xFFFF00 : 0xFF0000);
-        //   }
         if (intersectedObjects.length) {
             this.pickedObject = intersectedObjects[0].object;
         
@@ -54,14 +40,13 @@ function main() {
       }
     
  
-function getCanvasRelativePosition(event) {
-    const rect = canvas.getBoundingClientRect();
-    return {
-      x: (event.clientX - rect.left) * canvas.width  / rect.width,
-      y: (event.clientY - rect.top ) * canvas.height / rect.height,
-    };
-  }
-   
+    function getCanvasRelativePosition(event) {
+        const rect = canvas.getBoundingClientRect();
+        return {
+        x: (event.clientX - rect.left) * canvas.width  / rect.width,
+        y: (event.clientY - rect.top ) * canvas.height / rect.height,
+        };
+    }
 
     // Set up the canvas
     const canvas = document.querySelector('#c');
@@ -82,8 +67,20 @@ function getCanvasRelativePosition(event) {
     const near = 0.1;
     const far = 100;
     // Asked ChatGPT to help with resizing the canvas here
+    // const camera = new THREE.PerspectiveCamera(fov, window.innerWidth / window.innerHeight, near, far);
+
     const camera = new THREE.PerspectiveCamera(fov, window.innerWidth / window.innerHeight, near, far);
-    
+    camera.position.set(-13.67, 8, -14.9);
+
+    const camera2 = new THREE.PerspectiveCamera(fov, window.innerWidth / window.innerHeight, near, far);
+    camera2.position.set(0, 10, 0); // Top-down view
+    // camera2.position.x = 5;
+    // camera2.position.y = 10;
+    // camera2.position.z = -12;
+    camera2.lookAt(0, 0, 0);
+
+    let activeCamera = camera; // Start with camera1
+
 
     // const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 100);
     window.addEventListener('resize', () => {
@@ -92,19 +89,18 @@ function getCanvasRelativePosition(event) {
         camera.updateProjectionMatrix();
     });
 
-    // Set up the camera position
-    // camera.position.x = 10.5;
-    // camera.position.y = 10.5;
-    // camera.position.z = 13;
-
     camera.position.x = -13.67;
     camera.position.y = 8;
     camera.position.z = -14.9;
 
     // Allow orbit controls
     const controls = new OrbitControls( camera, canvas );
-    controls.target.set( 2.5, 5, 3 );
+    controls.target.set( 2.5, 4, 3 );
     controls.update();
+
+    const controls2 = new OrbitControls( camera2, canvas );
+    controls2.target.set( 0, 5, 0 );
+    controls2.update();
 
     // GUI camera updates
     function updateCamera() {
@@ -148,20 +144,7 @@ function getCanvasRelativePosition(event) {
 
        
 
-    // scene.fog = new THREE.Fog(0xff00ff, near, far);
-
-    // {
-    //     const loader = new THREE.CubeTextureLoader();
-    //     const texture = loader.load([
-    //       'resources/img/cubemaps/Standard-Cube-Map/px.png',
-    //       'resources/img/cubemaps/Standard-Cube-Map/nx.png',
-    //       'resources/img/cubemaps/Standard-Cube-Map/py.png',
-    //       'resources/img/cubemaps/Standard-Cube-Map/ny.png',
-    //       'resources/img/cubemaps/Standard-Cube-Map/pz.png',
-    //       'resources/img/cubemaps/Standard-Cube-Map/nz.png',
-    //     ]);
-    //     scene.background = texture;
-    //   }
+    scene.fog = new THREE.Fog(0xff00ff, near, far);
 
     {
         const skyLoader = new THREE.TextureLoader();
@@ -178,25 +161,9 @@ function getCanvasRelativePosition(event) {
 
     }
 
-    // scene.background = new THREE.Color( 'white' );
-
-    // const skyLoader = new THREE.TextureLoader();
-    // const bgTexture = skyLoader.load('resources/img/daikanyama.jpg');
-    // bgTexture.colorSpace = THREE.SRGBColorSpace;
-    // scene.background = bgTexture;
-
     // Define ambient, directional, and helpers
     const ambientLight = new THREE.AmbientLight(0xffffff, 1.5);
     scene.add(ambientLight);
-
-    // const lightK = new THREE.DirectionalLight(0xFFFFFF, 0.4);
-    // lightK.position.set(-5, 4, -5);
-    // lightK.target.position.set(5, 0, 5);
-    // scene.add(lightK);
-    // scene.add(lightK.target);
-
-    //     const lightHelper = new DirectionalLightHelper(lightK, 2);
-    // scene.add(lightHelper);
 
     const light1 = new THREE.DirectionalLight(0xFFFFFF, 1);
     light1.position.set(0, 9, 0);
@@ -210,47 +177,11 @@ function getCanvasRelativePosition(event) {
     light2.target.position.set(0, 5, 0);
     scene.add(light2);
     scene.add(light2.target);
-
-
-
-    // // Create a helper for the light
-    // const lightHelper = new DirectionalLightHelper(light1, 2);
-    // scene.add(lightHelper);
-
-    // const axesHelper = new AxesHelper(2);
-    // scene.add(axesHelper);
-
     
     const light = new THREE.RectAreaLight( 0xffffff, 1, 10, 8 );
     light.position.set( 0, 10, 0 );
     light.rotation.x = THREE.MathUtils.degToRad( - 90 );
     scene.add( light );
-
-    // const helper = new RectAreaLightHelper( light );
-    // light.add( helper );
-
-
-    // // add point light
-    // const pointLight = new THREE.PointLight(0xffffff, 2);
-    // pointLight.position.set(0, 9, -1.25);
-    // // pointLight.target.position.set(0, 5, 0);
-    // scene.add(pointLight);
-
-    // const pointLight2 = new THREE.PointLight(0xffffff, 2);
-    // pointLight2.position.set(0, 9, 0.75);
-    // // pointLight.target.position.set(0, 5, 0);
-    // scene.add(pointLight2);
-
-    // const pointLight3 = new THREE.PointLight(0xffffff, 2);
-    // pointLight3.position.set(0, 9, 2.625);
-    // // pointLight.target.position.set(0, 5, 0);
-    // scene.add(pointLight3);
-    // // const helper = new THREE.PointLightHelper(pointLight);
-    // // scene.add(helper);
-
-
-
-
 
     // Define shelf properties
     const shelfWidth = 7; 
@@ -276,20 +207,45 @@ function getCanvasRelativePosition(event) {
 
 
     // Define shapes to be created
-    const cubes = [];
-
     const cylinders = [
-        { x: 0, y: 5, z: againstWallZ, 
+        // Fake jar
+        { x: -2, y: 5, z: againstWallZ, 
             radiusT: 0.35, 
-            radiusB:0.35, 
+            radiusB: 0.35, 
             height: 1, 
             color: 0xd46648 
+        },
+        { x: -2, y: 5.45, z: againstWallZ, 
+            radiusT: 0.4, 
+            radiusB: 0.4, 
+            height: 0.075, 
+            color: 0xa3a3a3 
+        },
+        { x: -2, y: 5.5, z: againstWallZ, 
+            radiusT: 0.375, 
+            radiusB: 0.375, 
+            height: 0.125, 
+            color: 0xcccccc 
+        },
+
+        // Fake canister
+        { x: 3, y: 9.1, z: againstWallZ, 
+            radiusT: 0.3, 
+            radiusB: 0.3, 
+            height: 0.0625, 
+            color: 0x8a8396 
+        },
+        { x: 3, y: 9.05, z: againstWallZ, 
+            radiusT: 0.35, 
+            radiusB: 0.35, 
+            height: 0.0625, 
+            color: 0x8a8a8a 
         },
         { x: 3, y: 8.85, z: againstWallZ, 
             radiusT: 0.3, 
             radiusB: 0.3, 
             height: 0.4, 
-            color: 0x32a852 
+            color: 0xd6cce6 
         },
 
         // Pot
@@ -325,6 +281,26 @@ function getCanvasRelativePosition(event) {
             height: 0.075, 
             color: 0x9c9c9c
         },
+
+        //Range Hood Buttons
+        { x: -3.5, y: 6.2, z: 3.7, 
+            radiusT: 0.075, 
+            radiusB: 0.075, 
+            height: 0.25, 
+            color: 0x787878
+        },
+        { x: -3.5, y: 6.2, z: 3.4, 
+            radiusT: 0.075, 
+            radiusB: 0.075, 
+            height: 0.25, 
+            color: 0x787878
+        },
+        { x: -3.5, y: 6.2, z: 3.1, 
+            radiusT: 0.075, 
+            radiusB: 0.075, 
+            height: 0.25, 
+            color: 0x787878
+        },
     ];
 
     const boxes = [
@@ -350,11 +326,11 @@ function getCanvasRelativePosition(event) {
         },
 
         //Random box on shelf
-        { x: 1, y: 5.25, z: againstWallZ, 
+        { x: 2, y: 7.25, z: againstWallZ, 
             width: 0.5,
             height: 1.5, 
             depth: 1,
-            color: 0xffaaff 
+            color: 0xd1c27d 
         },
 
         // Pot handle
@@ -372,16 +348,37 @@ function getCanvasRelativePosition(event) {
             depth: 0.125,
             color: 0x9c9c9c
         },
+
+        // Range Hood
+        { x: -4.5, y: 8.75, z: 2.5,
+            width: 1,
+            height: 4, 
+            depth: 1,
+            color: 0x9c9c9c
+        },
+        { x: -4.5, y: 6.25, z: 2.5,
+            width: 2,
+            height: 1, 
+            depth: 3,
+            color: 0x9c9c9c
+        },
     ];
 
     const spheres = [
         // Fake tomato, probably gonna use texture
-        { x: 0.33, y: 3.125, z: -3.33, 
-            radius: 0.175,
+        // { x: 0.33, y: 3.125, z: -3.33, 
+        //     radius: 0.175,
+        //     widthSeg: 16, 
+        //     heightSeg: 16,
+        //     color: 0xff0000 
+        // },
+        { x: -4.1, y: 3.5, z: -3.8, 
+            radius: 0.2,
             widthSeg: 16, 
             heightSeg: 16,
-            color: 0xff0000 
+            color: 0xf75e4a
         },
+
         { x: -4, y: 3.35, z: -4, 
             radius: 0.2,
             widthSeg: 16, 
@@ -422,9 +419,6 @@ function getCanvasRelativePosition(event) {
         cube.position.set(-1, 3.0725, -3);
         cube.rotateOnWorldAxis(new THREE.Vector3(0, 0.5, 0), Math.PI / 4);
         scene.add(cube);
-        
-        // cubes.push(cube);
-
 
         shelves.forEach(({ x, y, z }) => {
             const shelf = new THREE.Mesh(shelfGeometry, material);
@@ -542,35 +536,49 @@ function getCanvasRelativePosition(event) {
             rotation: { x: 0, y: 270, z: 0 } 
         }, 
 
-        {
-            objPath: 'resources/models/JamJar/CHAHIN_JAM_JAR.obj',
-            mtlPath: 'resources/models/JamJar/CHAHIN_JAM_JAR.mtl',
-            position: { x: -3, y: 5, z: -4 }, 
-            scale: { x: 0.5, y: 0.5, z: 0.5 }, 
-            rotation: { x: 0, y: 180, z: 0 } 
-        },
+        // {
+        //     objPath: 'resources/models/JamJar/CHAHIN_JAM_JAR.obj',
+        //     mtlPath: 'resources/models/JamJar/CHAHIN_JAM_JAR.mtl',
+        //     position: { x: -3, y: 5, z: -4 }, 
+        //     scale: { x: 0.5, y: 0.5, z: 0.5 }, 
+        //     rotation: { x: 0, y: 180, z: 0 } 
+        // },
         // Stacked Bowls
         {
-            objPath: 'resources/models/Bowl/Bowl.obj',
-            mtlPath: 'resources/models/Bowl/Bowl.mtl',
-            position: { x: 2, y: 4.625, z: -3 }, 
-            scale: { x: 0.0125, y: 0.0125, z: 0.0125 }, 
-            rotation: { x: 270, y: 0, z: 0 } 
+            objPath: 'resources/models/woodBowl/woodBowl.obj',
+            mtlPath: 'resources/models/woodBowl/woodBowl.mtl',
+            position: { x: 2.5, y: 4.625, z: -4 }, 
+            scale: { x: 5, y: 5, z: 5 }, 
+            rotation: { x: 0, y: 0, z: 0 } 
         },
         {
-            objPath: 'resources/models/Bowl/Bowl.obj',
-            mtlPath: 'resources/models/Bowl/Bowl.mtl',
-            position: { x: 2, y: 4.825, z: -3 }, 
-            scale: { x: 0.0125, y: 0.0125, z: 0.0125 }, 
-            rotation: { x: 270, y: 0, z: 0 } 
+            objPath: 'resources/models/woodBowl/woodBowl.obj',
+            mtlPath: 'resources/models/woodBowl/woodBowl.mtl',
+            position: { x: 2.5, y: 4.85, z: -4 }, 
+            scale: { x: 5, y: 5, z: 5 }, 
+            rotation: { x: 0, y: 17, z: 0 } 
         },
         {
-            objPath: 'resources/models/Bowl/Bowl.obj',
-            mtlPath: 'resources/models/Bowl/Bowl.mtl',
-            position: { x: 2, y: 5.025, z: -3 }, 
-            scale: { x: 0.0125, y: 0.0125, z: 0.0125 }, 
-            rotation: { x: 270, y: 0, z: 0 } 
+            objPath: 'resources/models/woodBowl/woodBowl.obj',
+            mtlPath: 'resources/models/woodBowl/woodBowl.mtl',
+            position: { x: 2.5, y: 5.125, z: -4 }, 
+            scale: { x: 5, y: 5, z: 5 }, 
+            rotation: { x: 0, y: 0, z: 0 } 
         },
+        // {
+        //     objPath: 'resources/models/Bowl/Bowl.obj',
+        //     mtlPath: 'resources/models/Bowl/Bowl.mtl',
+        //     position: { x: 2, y: 4.825, z: -3 }, 
+        //     scale: { x: 0.0125, y: 0.0125, z: 0.0125 }, 
+        //     rotation: { x: 270, y: 0, z: 0 } 
+        // },
+        // {
+        //     objPath: 'resources/models/Bowl/Bowl.obj',
+        //     mtlPath: 'resources/models/Bowl/Bowl.mtl',
+        //     position: { x: 2, y: 5.025, z: -3 }, 
+        //     scale: { x: 0.0125, y: 0.0125, z: 0.0125 }, 
+        //     rotation: { x: 270, y: 0, z: 0 } 
+        // },
         // For bowl of fruit
         {
             objPath: 'resources/models/Bowl/Bowl.obj',
@@ -628,67 +636,6 @@ function getCanvasRelativePosition(event) {
         });
     }
 
-    
-    function createTexturedBox({ width, height, depth, textures, position, rotation }) {
-        const scene = new THREE.Scene();
-        
-        const loader = new THREE.TextureLoader();
-        const materials = textures.map((path) => new THREE.MeshBasicMaterial({ map: loader.load(path) }));
-    
-        // Front face
-        const frontGeometry = new THREE.PlaneGeometry(width, height);
-        const front = new THREE.Mesh(frontGeometry, materials[0]);  // Texture for front
-        front.position.set(0, height / 2, depth / 2); 
-        front.rotation.y = Math.PI; // Rotate 
-    
-        // Back face
-        const backGeometry = new THREE.PlaneGeometry(width, height);
-        const back = new THREE.Mesh(backGeometry, materials[1]); // Texture for back
-        back.position.set(0, height / 2, -depth / 2); // Position it at back
-        back.rotation.y = 0;
-    
-        // Left face
-        const leftGeometry = new THREE.PlaneGeometry(depth, height);
-        const left = new THREE.Mesh(leftGeometry, materials[2]); // Texture for left side
-        left.position.set(-width / 2, height / 2, 0);
-        left.rotation.y = Math.PI / 2;
-    
-        // Right face
-        const rightGeometry = new THREE.PlaneGeometry(depth, height);
-        const right = new THREE.Mesh(rightGeometry, materials[3]); // Texture for right side
-        right.position.set(width / 2, height / 2, 0);
-        right.rotation.y = -Math.PI / 2;
-    
-        // Top face
-        const topGeometry = new THREE.PlaneGeometry(width, depth);
-        const top = new THREE.Mesh(topGeometry, materials[4]); // Texture for top
-        top.position.set(0, height, 0);
-        top.rotation.x = -Math.PI / 2;
-    
-        // Bottom face
-        const bottomGeometry = new THREE.PlaneGeometry(width, depth);
-        const bottom = new THREE.Mesh(bottomGeometry, materials[5]); // Texture for bottom
-        bottom.position.set(0, 0, 0);
-        bottom.rotation.x = Math.PI / 2;
-    
-        // Add all faces to the scene
-        scene.add(front);
-        scene.add(back);
-        scene.add(left);
-        scene.add(right);
-        scene.add(top);
-        scene.add(bottom);
-    
-        // Apply the position and rotation for the entire box
-        scene.position.set(position.x, position.y, position.z);
-        scene.rotation.set(
-            THREE.MathUtils.degToRad(rotation.x),
-            THREE.MathUtils.degToRad(rotation.y),
-            THREE.MathUtils.degToRad(rotation.z)
-        );
-    
-        return scene;
-    }
 
     let canModel = null;
     const mtlLoader = new MTLLoader();
@@ -725,6 +672,15 @@ function getCanvasRelativePosition(event) {
     let pauseFrames = 0;
     const maxPauseFrames = 30;
 
+
+    // Had ChatGPT help me when website didn't advise enough
+    window.addEventListener('keydown', (event) => {
+        if (event.key === 'c') {
+            activeCamera = (activeCamera === camera) ? camera2 : camera;
+        }
+    });
+    
+
     function render(time) {
 
         time *= 0.001;
@@ -755,7 +711,9 @@ function getCanvasRelativePosition(event) {
             }
         }
 
-        renderer.render(scene, camera);
+        // renderer.render(scene, camera);
+        renderer.render(scene, activeCamera);
+
         requestAnimationFrame(render);
 
         
