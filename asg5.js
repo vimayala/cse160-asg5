@@ -341,6 +341,13 @@ function getCanvasRelativePosition(event) {
             depth: 11,
             color: 0xffffff
         },
+        // Fix floors
+        { x: -0.2, y: -0.1, z: 0.1, 
+            width: 11,
+            height: 0.25, 
+            depth: 11,
+            color: 0xffffff
+        },
 
         //Random box on shelf
         { x: 1, y: 5.25, z: againstWallZ, 
@@ -602,7 +609,6 @@ function getCanvasRelativePosition(event) {
                         object.scale.set(scale.x, scale.y, scale.z);
                     }
 
-                    // Set rotation (Three.js uses radians)
                     if (rotation) {
                         object.rotation.set(
                             THREE.MathUtils.degToRad(rotation.x), 
@@ -684,30 +690,69 @@ function getCanvasRelativePosition(event) {
         return scene;
     }
 
+    let canModel = null;
+    const mtlLoader = new MTLLoader();
+    mtlLoader.load('resources/models/Can/can.mtl', (mtl) => {
+        mtl.preload();
+    
+        const objLoader = new OBJLoader();
+        objLoader.setMaterials(mtl);
+    
+        objLoader.load('resources/models/Can/can.obj', (object) => {
+            object.position.set(1, 0.175, 0);
+            object.scale.set(1, 1, 1);
+            object.rotation.set(
+                THREE.MathUtils.degToRad(270), 
+                THREE.MathUtils.degToRad(45), 
+                THREE.MathUtils.degToRad(0)
+            );
+    
+            scene.add(object);
+            canModel = object; // Store reference to animate later
+        });
+    });
+    
+
     loadObjects(scene);
+
+    
+    let circTime = 0; 
+
+    // Forward vs back
+    let direction = 1;
+
+    // ChatGPT helped me figure out pause frames
+    let pauseFrames = 0;
+    const maxPauseFrames = 30;
 
     function render(time) {
 
         time *= 0.001;
-        // console.log(camera.position);
-
-        // cubes.forEach(cube => {
-        //     cube.rotation.x = time;
-        //     cube.rotation.y = time;
-        // });
-
-        // Place animation in here
-        // const canvasAspect = canvas.clientWidth / canvas.clientHeight;
-        // const imageAspect = bgTexture.image ? bgTexture.image.width / bgTexture.image.height : 1;
-        // const aspect = imageAspect / canvasAspect;
-       
-        // bgTexture.offset.x = aspect > 1 ? (1 - 1 / aspect) / 2 : 0;
-        // bgTexture.repeat.x = aspect > 1 ? 1 / aspect : 1;
-       
-        // bgTexture.offset.y = aspect > 1 ? 0 : (1 - aspect) / 2;
-        // bgTexture.repeat.y = aspect > 1 ? 1 : aspect;
         if(pickToggle){
             pickHelper.pick(pickPosition, scene, camera, time);
+        }
+
+
+        if (canModel) {
+            const radius = 1.25;  
+            const speed = 0.01;
+    
+            if (pauseFrames > 0) {
+                pauseFrames--; // Wait for a few frames before resuming
+            } else {
+
+                canModel.position.x = radius * Math.cos(circTime);
+                canModel.position.z = radius * 0.4 * Math.sin(circTime);
+                canModel.rotation.y += 0.05;
+    
+                circTime += speed * direction;
+    
+                // Change directions
+                if (circTime >= Math.PI || circTime <= 0) {
+                    direction *= -1;
+                    pauseFrames = maxPauseFrames; // Pause before switching direction
+                }
+            }
         }
 
         renderer.render(scene, camera);
