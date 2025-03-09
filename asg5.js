@@ -270,8 +270,8 @@ function getCanvasRelativePosition(event) {
 
     // Define cube properties
     const boxWidth = 1;
-    const boxHeight = 1;
-    const boxDepth = 1;
+    const boxHeight = 0.5;
+    const boxDepth = 1.5;
     const geometry = new THREE.BoxGeometry(boxWidth, boxHeight, boxDepth);
 
 
@@ -353,8 +353,11 @@ function getCanvasRelativePosition(event) {
     loadManager.onLoad = () => {
         loadingElem.style.display = 'none'; // Hide loading screen
         const cube = new THREE.Mesh(geometry, materials);
+        cube.position.set(-1, 3, -3);
+        cube.rotateOnWorldAxis(new THREE.Vector3(0, 0.5, 0), Math.PI / 4);
         scene.add(cube);
-        cubes.push(cube);
+        
+        // cubes.push(cube);
 
 
         shelves.forEach(({ x, y, z }) => {
@@ -403,12 +406,12 @@ function getCanvasRelativePosition(event) {
 
     const loader = new THREE.TextureLoader(loadManager);
     const texturePaths = [
-        'resources/img/flower-1.jpg',
-        'resources/img/flower-2.jpg',
-        'resources/img/flower-3.jpg',
-        'resources/img/flower-4.jpg',
-        'resources/img/flower-5.jpg',
-        'resources/img/flower-6.jpg'
+        'resources/img/book/side.jpg',         // front
+        'resources/img/book/spine.jpg',        // left
+        'resources/img/book/cover.jpg',          // back
+        'resources/img/book/back.jpg',          // right
+        'resources/img/book/top.jpg',        // top
+        'resources/img/book/bottom.jpg'         // bottom
     ];
 
     const materials = texturePaths.map(path => 
@@ -552,6 +555,66 @@ function getCanvasRelativePosition(event) {
     }
 
     
+    function createTexturedBox({ width, height, depth, textures, position, rotation }) {
+        const scene = new THREE.Scene();
+        
+        const loader = new THREE.TextureLoader();
+        const materials = textures.map((path) => new THREE.MeshBasicMaterial({ map: loader.load(path) }));
+    
+        // Front face
+        const frontGeometry = new THREE.PlaneGeometry(width, height);
+        const front = new THREE.Mesh(frontGeometry, materials[0]);  // Texture for front
+        front.position.set(0, height / 2, depth / 2); 
+        front.rotation.y = Math.PI; // Rotate 
+    
+        // Back face
+        const backGeometry = new THREE.PlaneGeometry(width, height);
+        const back = new THREE.Mesh(backGeometry, materials[1]); // Texture for back
+        back.position.set(0, height / 2, -depth / 2); // Position it at back
+        back.rotation.y = 0;
+    
+        // Left face
+        const leftGeometry = new THREE.PlaneGeometry(depth, height);
+        const left = new THREE.Mesh(leftGeometry, materials[2]); // Texture for left side
+        left.position.set(-width / 2, height / 2, 0);
+        left.rotation.y = Math.PI / 2;
+    
+        // Right face
+        const rightGeometry = new THREE.PlaneGeometry(depth, height);
+        const right = new THREE.Mesh(rightGeometry, materials[3]); // Texture for right side
+        right.position.set(width / 2, height / 2, 0);
+        right.rotation.y = -Math.PI / 2;
+    
+        // Top face
+        const topGeometry = new THREE.PlaneGeometry(width, depth);
+        const top = new THREE.Mesh(topGeometry, materials[4]); // Texture for top
+        top.position.set(0, height, 0);
+        top.rotation.x = -Math.PI / 2;
+    
+        // Bottom face
+        const bottomGeometry = new THREE.PlaneGeometry(width, depth);
+        const bottom = new THREE.Mesh(bottomGeometry, materials[5]); // Texture for bottom
+        bottom.position.set(0, 0, 0);
+        bottom.rotation.x = Math.PI / 2;
+    
+        // Add all faces to the scene
+        scene.add(front);
+        scene.add(back);
+        scene.add(left);
+        scene.add(right);
+        scene.add(top);
+        scene.add(bottom);
+    
+        // Apply the position and rotation for the entire box
+        scene.position.set(position.x, position.y, position.z);
+        scene.rotation.set(
+            THREE.MathUtils.degToRad(rotation.x),
+            THREE.MathUtils.degToRad(rotation.y),
+            THREE.MathUtils.degToRad(rotation.z)
+        );
+    
+        return scene;
+    }
 
     loadObjects(scene);
 
