@@ -1,12 +1,27 @@
-import * as THREE from './node_modules/three/build/three.module.js';
-import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
-import {OBJLoader} from 'three/addons/loaders/OBJLoader.js';
-import {MTLLoader} from 'three/addons/loaders/MTLLoader.js'
+// import * as THREE from './node_modules/three/build/three.module.js';
+// import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
+// import {OBJLoader} from 'three/addons/loaders/OBJLoader.js';
+// import {MTLLoader} from 'three/addons/loaders/MTLLoader.js'
+// import { GUI } from 'three/addons/libs/lil-gui.module.min.js';
+
+
+// import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+// import { OBJLoader } from 'three/addons/loaders/OBJLoader.js';
+// import { MTLLoader } from 'three/addons/loaders/MTLLoader.js';
+// import { GUI } from 'three/addons/libs/lil-gui.module.min.js';
+
+
+import * as THREE from 'https://unpkg.com/three@0.160.0/build/three.module.js';
+import { OrbitControls } from 'https://unpkg.com/three@0.160.0/examples/jsm/controls/OrbitControls.js';
+import { OBJLoader } from 'https://unpkg.com/three@0.160.0/examples/jsm/loaders/OBJLoader.js';
+import { MTLLoader } from 'https://unpkg.com/three@0.160.0/examples/jsm/loaders/MTLLoader.js';
+import { GUI } from 'https://unpkg.com/three@0.160.0/examples/jsm/libs/lil-gui.module.min.js';
+
+
 // import { DirectionalLightHelper } from 'three/examples/jsm/helpers/DirectionalLightHelper.js';
-import { DirectionalLightHelper, AxesHelper } from 'three';
-import { GUI } from 'three/addons/libs/lil-gui.module.min.js';
-import { RectAreaLightUniformsLib } from 'three/addons/lights/RectAreaLightUniformsLib.js';
-import { RectAreaLightHelper } from 'three/addons/helpers/RectAreaLightHelper.js';
+// import { AxesHelper } from 'three';
+// import { RectAreaLightUniformsLib } from 'three/addons/lights/RectAreaLightUniformsLib.js';
+// import { RectAreaLightHelper } from 'three/addons/helpers/RectAreaLightHelper.js';
 
 // /Users/victoria/Documents/CSE 160/cse160-asg5/src/pick.js
 
