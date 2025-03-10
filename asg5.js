@@ -4,41 +4,6 @@ import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader.js';
 import { MTLLoader } from 'three/examples/jsm/loaders/MTLLoader.js';
 import { GUI } from 'three/examples/jsm/libs/lil-gui.module.min.js';
 
-// import * as THREE from './node_modules/three/build/three.module.js';
-// import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
-// import {OBJLoader} from 'three/addons/loaders/OBJLoader.js';
-// import {MTLLoader} from 'three/addons/loaders/MTLLoader.js'
-// import { GUI } from 'three/addons/libs/lil-gui.module.min.js';
-
-
-// import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-// import { OBJLoader } from 'three/addons/loaders/OBJLoader.js';
-// import { MTLLoader } from 'three/addons/loaders/MTLLoader.js';
-// import { GUI } from 'three/addons/libs/lil-gui.module.min.js';
-
-// import * as THREE from './node_modules/three/build/three.module.js';
-// import { OrbitControls } from './node_modules/three/examples/jsm/controls/OrbitControls.js';
-// import { OBJLoader } from './node_modules/three/examples/jsm/loaders/OBJLoader.js';
-// import { MTLLoader } from './node_modules/three/examples/jsm/loaders/MTLLoader.js';
-// import { GUI } from './node_modules/three/examples/jsm/libs/lil-gui.module.min.js';
-
-// import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-// import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader.js';
-// import { MTLLoader } from 'three/examples/jsm/loaders/MTLLoader.js';
-// import { GUI } from 'three/examples/jsm/libs/lil-gui.module.min.js';
-
-
-import { Scene, PerspectiveCamera, WebGLRenderer } from 'three';
-
-
-// import { DirectionalLightHelper } from 'three/examples/jsm/helpers/DirectionalLightHelper.js';
-// import { AxesHelper } from 'three';
-// import { RectAreaLightUniformsLib } from 'three/addons/lights/RectAreaLightUniformsLib.js';
-// import { RectAreaLightHelper } from 'three/addons/helpers/RectAreaLightHelper.js';
-
-// /Users/victoria/Documents/CSE 160/cse160-asg5/src/pick.js
-
-
 // Adjusted from helper linked site with ChatGPT
 function main() {
     const pickToggle = true;
@@ -172,7 +137,7 @@ function main() {
 
        
 
-    scene.fog = new THREE.Fog(0xff00ff, near, far);
+    // scene.fog = new THREE.Fog(0xff00ff, near, far);
 
     {
         const skyLoader = new THREE.TextureLoader();
@@ -400,35 +365,35 @@ function main() {
         //     heightSeg: 16,
         //     color: 0xff0000 
         // },
-        { x: -4.1, y: 3.5, z: -3.8, 
+        { x: -4.1, y: 3.55, z: -3.7, 
             radius: 0.2,
-            widthSeg: 16, 
-            heightSeg: 16,
+            widthSeg: 8, 
+            heightSeg: 8,
             color: 0xf75e4a
         },
 
         { x: -4, y: 3.35, z: -4, 
             radius: 0.2,
-            widthSeg: 16, 
-            heightSeg: 16,
+            widthSeg: 8, 
+            heightSeg: 8,
             color: 0xf7b54a
         },
-        { x: -4.2, y: 3.35, z: -3.8, 
+        { x: -4.3, y: 3.35, z: -3.8, 
             radius: 0.2,
-            widthSeg: 16, 
-            heightSeg: 16,
+            widthSeg: 8, 
+            heightSeg: 8,
             color: 0xf7b54a
         },
         { x: -4.2, y: 3.35, z: -3.5, 
             radius: 0.2,
-            widthSeg: 16, 
-            heightSeg: 16,
+            widthSeg: 8, 
+            heightSeg: 8,
             color: 0xf7de83
         },
         { x: -3.9, y: 3.35, z: -3.5, 
             radius: 0.2,
-            widthSeg: 16, 
-            heightSeg: 16,
+            widthSeg: 8, 
+            heightSeg: 8,
             color: 0x74a36a
         },
     ];
@@ -456,7 +421,7 @@ function main() {
 
 
         cylinders.forEach(({ x, y, z, radiusT, radiusB, height, color }) => {
-            const cylinderGeometry = new THREE.CylinderGeometry(radiusT, radiusB, height, 15);
+            const cylinderGeometry = new THREE.CylinderGeometry(radiusT, radiusB, height, 7);
             const cylinderMaterial = new THREE.MeshStandardMaterial({ color });
 
             const cylinder = new THREE.Mesh(cylinderGeometry, cylinderMaterial);
@@ -593,33 +558,21 @@ function main() {
             scale: { x: 5, y: 5, z: 5 }, 
             rotation: { x: 0, y: 0, z: 0 } 
         },
-        // {
-        //     objPath: 'resources/models/Bowl/Bowl.obj',
-        //     mtlPath: 'resources/models/Bowl/Bowl.mtl',
-        //     position: { x: 2, y: 4.825, z: -3 }, 
-        //     scale: { x: 0.0125, y: 0.0125, z: 0.0125 }, 
-        //     rotation: { x: 270, y: 0, z: 0 } 
-        // },
-        // {
-        //     objPath: 'resources/models/Bowl/Bowl.obj',
-        //     mtlPath: 'resources/models/Bowl/Bowl.mtl',
-        //     position: { x: 2, y: 5.025, z: -3 }, 
-        //     scale: { x: 0.0125, y: 0.0125, z: 0.0125 }, 
-        //     rotation: { x: 270, y: 0, z: 0 } 
-        // },
         // For bowl of fruit
-        {
-            objPath: 'resources/models/Bowl/Bowl.obj',
-            mtlPath: 'resources/models/Bowl/Bowl.mtl',
-            position: { x: -5, y: 2.85, z: -3 }, 
-            scale: { x: 0.0125, y: 0.0125, z: 0.0125 }, 
-            rotation: { x: 270, y: 0, z: 0 } 
-        },
         // {
-        //     objPath: 'resources/models/kitchenCabinet/kitchenCabinet.obj',
-        //     mtlPath: 'resources/models/kitchenCabinet/kitchenCabinet.mtl',
-        //     position: { x: -2, y: 0, z: 0 } // Move another cabinet to the left
-        // }
+        //     objPath: 'resources/models/Bowl/Bowl.obj',
+        //     mtlPath: 'resources/models/Bowl/Bowl.mtl',
+        //     position: { x: -5, y: 2.85, z: -3 }, 
+        //     scale: { x: 0.0125, y: 0.0125, z: 0.0125 }, 
+        //     rotation: { x: 270, y: 0, z: 0 } 
+        // },
+        {
+            objPath: 'resources/models/woodBowl/woodBowl.obj',
+            mtlPath: 'resources/models/woodBowl/woodBowl2.mtl',
+            position: { x: -4.1, y: 2.85, z: -3.75 }, 
+            scale: { x: 5, y: 6, z: 5 }, 
+            rotation: { x: 0, y: 0, z: 0 } 
+        },
     ];
 
     function loadObjects(scene) {
@@ -711,7 +664,7 @@ function main() {
 
     function render(time) {
 
-        time *= 0.001;
+        time *= 0.0005;
         if(pickToggle){
             pickHelper.pick(pickPosition, scene, camera, time);
         }
