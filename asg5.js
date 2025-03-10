@@ -1,4 +1,4 @@
-import * as THREE from 'three';
+import * as THREE from './node_modules/three/build/three.module.js';
 import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
 import {OBJLoader} from 'three/addons/loaders/OBJLoader.js';
 import {MTLLoader} from 'three/addons/loaders/MTLLoader.js'
@@ -598,10 +598,10 @@ function main() {
         const mtlLoader = new MTLLoader();
 
         objectsToLoad.forEach(({ objPath, mtlPath, position, scale, rotation }) => {
-            console.log(`Loading: ${mtlPath}`);
+            // console.log(`Loading: ${mtlPath}`);
             
             mtlLoader.load(mtlPath, (mtl) => {
-                console.log(`Loaded MTL: ${mtlPath}`);
+                // console.log(`Loaded MTL: ${mtlPath}`);
                 mtl.preload();
 
                 const objLoader = new OBJLoader();
