@@ -10,12 +10,19 @@
 // import { MTLLoader } from 'three/addons/loaders/MTLLoader.js';
 // import { GUI } from 'three/addons/libs/lil-gui.module.min.js';
 
+import * as THREE from './node_modules/three/build/three.module.js';
+// import { OrbitControls } from './node_modules/three/examples/jsm/controls/OrbitControls.js';
+// import { OBJLoader } from './node_modules/three/examples/jsm/loaders/OBJLoader.js';
+// import { MTLLoader } from './node_modules/three/examples/jsm/loaders/MTLLoader.js';
+// import { GUI } from './node_modules/three/examples/jsm/libs/lil-gui.module.min.js';
 
-import * as THREE from 'https://unpkg.com/three@0.160.0/build/three.module.js';
-import { OrbitControls } from 'https://unpkg.com/three@0.160.0/examples/jsm/controls/OrbitControls.js';
-import { OBJLoader } from 'https://unpkg.com/three@0.160.0/examples/jsm/loaders/OBJLoader.js';
-import { MTLLoader } from 'https://unpkg.com/three@0.160.0/examples/jsm/loaders/MTLLoader.js';
-import { GUI } from 'https://unpkg.com/three@0.160.0/examples/jsm/libs/lil-gui.module.min.js';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader.js';
+import { MTLLoader } from 'three/examples/jsm/loaders/MTLLoader.js';
+import { GUI } from 'three/examples/jsm/libs/lil-gui.module.min.js';
+
+
+import { Scene, PerspectiveCamera, WebGLRenderer } from 'three';
 
 
 // import { DirectionalLightHelper } from 'three/examples/jsm/helpers/DirectionalLightHelper.js';
