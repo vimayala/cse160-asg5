@@ -21,7 +21,7 @@
     * (Press '**F**' on keyboard to see)
 
 
-## 3D Models Used:
+## Sources Used:
 #### Poly Pizza:
 
 * Kitchen Cabinet, Stove, Sink, and Can by Kenney
@@ -31,7 +31,12 @@ https://poly.pizza/u/Kenney
 https://poly.pizza/u/Garrett%20LeFever
 
 
-* CGTrader:
+#### CGTrader:
 
 lights room with orange brick wall and two by randizol
 https://www.cgtrader.com/free-3d-models/interior/kitchen/lights-64012914-a40f-4e6b-9e07-6fbefa46d13e
+
+
+#### 360Cities
+High Street Apartments - 360 Panorama by Henry Tee 
+https://www.360cities.net/image/high-street-apartments-360-panorama
