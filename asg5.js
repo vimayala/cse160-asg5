@@ -136,8 +136,18 @@ function main() {
     window.addEventListener('mouseleave', clearPickPosition);
 
        
+    // Fog automatically off
+    let fogEnabled = false;
 
-    // scene.fog = new THREE.Fog(0xff00ff, near, far);
+    function toggleFog() {
+        if (fogEnabled) {
+            scene.fog = null;
+        } else {
+            scene.fog = new THREE.Fog(0xff00ff, near, far);
+        }
+        fogEnabled = !fogEnabled;
+    }
+    
 
     {
         const skyLoader = new THREE.TextureLoader();
@@ -407,7 +417,7 @@ function main() {
     const progressBarElem = document.querySelector('.progressbar');
 
     loadManager.onLoad = () => {
-        loadingElem.style.display = 'none'; // Hide loading screen
+        loadingElem.style.display = 'none'; 
         const cube = new THREE.Mesh(geometry, materials);
         cube.position.set(-1, 3.0725, -3);
         cube.rotateOnWorldAxis(new THREE.Vector3(0, 0.5, 0), Math.PI / 4);
@@ -655,11 +665,20 @@ function main() {
 
 
     // Had ChatGPT help me when website didn't advise enough
+    // Change active camera
     window.addEventListener('keydown', (event) => {
         if (event.key === 'c') {
             activeCamera = (activeCamera === camera) ? camera2 : camera;
         }
     });
+
+    // Toggle fog on/off
+    window.addEventListener("keydown", (event) => {
+        if (event.key === "f") {
+            toggleFog();
+        }
+    });
+    
     
 
     function render(time) {
